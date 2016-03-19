@@ -17,15 +17,9 @@ function create() {
 	// smooth out movement a bit
 	game.renderer.renderSession.roundPixels = true;
 
-	// set world bounds
-	//game.world.setBounds(0, 0, GameWidth * 2, GameHeight);
-
 	// run the creates
 	world.create();
 	player.create();
-
-	// track the player
-	//game.camera.follow(player.get(), game.camera.FOLLOW_LOCKON);
 
 }
 
@@ -35,9 +29,6 @@ function update() {
 	world.update();
 	player.update();
 
-	// track the player
-	//game.camera.x = player.location().x - PlayerOffset;
-
 	// pay the physics bill on time
 	physics();
 }
@@ -46,4 +37,5 @@ function physics() {
 
 	// run collision checks
 	game.physics.arcade.collide(player.get(), world.get_ground());
+	game.physics.arcade.collide(world.get_enemies(), world.get_ground());
 }
