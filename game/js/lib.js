@@ -6,7 +6,7 @@ var PlayerHeight = 64;
 var PlayerOffset = 2 * PlayerWidth;
 var PlayerSpeed = 300;
 
-var TileWidth = 32;
-var TileHeight = 32;
+var TileWidth = 64;
+var TileHeight = 64;
 
 var GameOver = false;

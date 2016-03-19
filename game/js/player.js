@@ -11,7 +11,7 @@ var player = {
 
 	create: function() {
 
-		player.hero = game.add.sprite(PlayerOffset, GameHeight - TileHeight - PlayerHeight, 'player');
+		player.hero = game.add.sprite(PlayerOffset, GameHeight - 2 * TileHeight - PlayerHeight, 'player');
 		
 		game.physics.arcade.enable(player.hero);
 		player.hero.body.gravity.y = 300;
