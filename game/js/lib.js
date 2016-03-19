@@ -8,3 +8,5 @@ var PlayerSpeed = 300;
 
 var TileWidth = 32;
 var TileHeight = 32;
+
+var GameOver = false;

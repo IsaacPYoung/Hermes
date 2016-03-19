@@ -18,6 +18,7 @@ function create() {
 	game.renderer.renderSession.roundPixels = true;
 
 	// run the creates
+	input.create();
 	world.create();
 	player.create();
 
@@ -38,4 +39,9 @@ function physics() {
 	// run collision checks
 	game.physics.arcade.collide(player.get(), world.get_ground());
 	game.physics.arcade.collide(world.get_enemies(), world.get_ground());
+	game.physics.arcade.overlap(player.get(), world.get_enemies(), game_over);
+}
+
+function game_over() {
+	GameOver = true;
 }

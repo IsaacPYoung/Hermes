@@ -27,8 +27,11 @@ var world = {
 
 		world.ground_group = game.add.group();
 		world.ground_group.enableBody = true;
-
 		world.ground_tiles = [];
+
+		world.enemy_group = game.add.group();
+		world.enemy_group.enableBody = true;
+		world.enemies = [];
 
 		for (i = 0; i * TileWidth < GameWidth * 2; i++)
 		{
@@ -38,17 +41,21 @@ var world = {
 
 			if (i * TileWidth > GameWidth && Math.random() < world.enemy_frequency)
 			{
-				world.spawn_enemy;
+				world.spawn_enemy();
 			}
 
 		}
-
-		world.enemy_group = game.add.group();
-		world.enemy_group.enableBody = true;
-		world.enemies = [];
 	},
 
 	update: function() {
+
+		if (GameOver)
+		{
+			for (i = 0; i < world.ground_tiles.length; i++)
+			{
+				world.ground_tiles[i].body.velocity.x = 0;
+			}
+		}
 
 		// recycle the ground tiles
 		if (world.ground_tiles[0].position.x < -TileWidth)
@@ -83,5 +90,13 @@ var world = {
 		enemy = 'enemy_' + Math.floor(Math.random() * 3 + 1);
 		world.enemies.push(world.enemy_group.create(xoff, yoff, enemy));
 		world.enemies[world.enemies.length - 1].body.gravity.y = 300;
+	},
+
+	kill_enemy: function(index) {
+		if (index >= 0 && index < world.enemies.length)
+		{
+			world.enemy_group.remove(world.enemies[index]);
+			world.enemies.splice(index, 1);
+		}
 	},
 };

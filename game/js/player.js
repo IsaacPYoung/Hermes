@@ -20,7 +20,14 @@ var player = {
 
 	update: function() {
 
-		player.hero.body.velocity.x = 300;
+		if (GameOver)
+		{
+			player.hero.body.velocity.x = 0;
+		}
+		else
+		{
+			player.hero.body.velocity.x = 300;
+		}
 	},
 
 	// return the in game representation
