@@ -18,6 +18,8 @@ var world = {
 	current_biome: 0,
 	biome_counter: 20,
 
+	backgrounds: null,
+
 	// music
 	music: null,
 
@@ -49,6 +51,8 @@ var world = {
 		// lightning
 		game.load.image('lightning', 'assets/LIGHTNIG.png'); // 128x512
 
+		game.load.image('background', 'assets/world/background.png'); //1920x540
+
 		// audio
 		//game.load.audio('exodus', 'assets/audio/exodus.mp3');
 	},
@@ -56,6 +60,15 @@ var world = {
 	create: function() {
 
 		world.create_biomes();
+
+		world.backgrounds = [];
+		world.backgrounds.push(game.add.sprite(0, 0, 'background'));
+		game.physics.arcade.enable(world.backgrounds[0]);
+		world.backgrounds[0].body.velocity.x = -20;
+		world.backgrounds.push(game.add.sprite(1920, 0, 'background'));
+		game.physics.arcade.enable(world.backgrounds[1]);
+		world.backgrounds[1].body.velocity.x = -20;
+
 
 		world.ground_group = game.add.group();
 		world.ground_group.enableBody = true;
