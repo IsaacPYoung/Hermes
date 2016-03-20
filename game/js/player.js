@@ -13,7 +13,7 @@ var player = {
 
 		player.hero = game.add.sprite(PlayerOffset, GameHeight - 2 * TileHeight - PlayerHeight, 'player');
 		player.hero.animations.add('run');
-		player.hero.animations.play('run', 4, true);
+		player.hero.animations.play('run', 5, true);
 
 		game.physics.arcade.enable(player.hero);
 		player.hero.body.gravity.y = 300;
