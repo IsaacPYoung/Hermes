@@ -42,9 +42,12 @@ var world = {
 		game.load.image('rocks_3', 'assets/world/rocks 3.png'); //16x16
 
 		// the enemies
-		game.load.image('enemy_1', 'assets/enemies/enemy1.png');
-		game.load.image('enemy_2', 'assets/enemies/enemy2.png');
-		game.load.image('enemy_3', 'assets/enemies/enemy3.png');
+		game.load.image('enemy_1', 'assets/enemies/enemy1.png'); //64x64
+		//game.load.image('enemy_2', 'assets/enemies/enemy2.png');
+		//game.load.image('enemy_3', 'assets/enemies/enemy3.png');
+
+		// lightning
+		game.load.image('lightning', 'assets/LIGHTNIG.png'); // 128x512
 
 		// audio
 		game.load.audio('exodus', 'assets/audio/exodus.mp3');
@@ -128,8 +131,8 @@ var world = {
 		xoff = world.ground_tiles[world.ground_tiles.length - 1].position.x + TileWidth;
 
 		tmp = world.ground_tiles.shift();
-		tmp.position.x = xoff;
 		tmp.removeChildren();
+		tmp.position.x = xoff;
 		world.ground_tiles.push(tmp);
 
 		tmp = world.ground_bottom_tiles.shift();
@@ -153,6 +156,11 @@ var world = {
 	kill_enemy: function(index) {
 		if (index >= 0 && index < world.enemies.length)
 		{
+			xoff = world.enemies[index].position.x - world.ground_tiles[0].position.x;
+			yoff = -512;
+			world.ground_tiles[0]
+						.addChild(game.make.sprite(xoff, yoff, 'lightning'));
+			
 			world.enemy_group.remove(world.enemies[index]);
 			world.enemies.splice(index, 1);
 		}
