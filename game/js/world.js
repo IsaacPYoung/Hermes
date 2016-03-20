@@ -110,10 +110,15 @@ var world = {
 
 		if (GameOver)
 		{
-			for (i = 0; i < world.ground_tiles.length; i++)
+			for (var i = 0; i < world.ground_tiles.length; i++)
 			{
 				world.ground_tiles[i].body.velocity.x = 0;
 				world.ground_bottom_tiles[i].body.velocity.x = 0;
+			}
+
+			for (var i = 0; i < world.backgrounds.length; i++)
+			{
+				world.backgrounds[i].body.velocity.x = 0;
 			}
 		}
 
