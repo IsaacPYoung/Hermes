@@ -18,6 +18,9 @@ var world = {
 	current_biome: 0,
 	biome_counter: 20,
 
+	// music
+	music: null,
+
 	preload: function() {
 
 		// the ground
@@ -42,6 +45,9 @@ var world = {
 		game.load.image('enemy_1', 'assets/enemies/enemy1.png');
 		game.load.image('enemy_2', 'assets/enemies/enemy2.png');
 		game.load.image('enemy_3', 'assets/enemies/enemy3.png');
+
+		// audio
+		game.load.audio('exodus', 'assets/audio/exodus.mp3');
 	},
 
 	create: function() {
@@ -79,8 +85,9 @@ var world = {
 			{
 				world.spawn_enemy();
 			}
-
 		}
+
+		world.start_music();
 	},
 
 	update: function() {
@@ -157,6 +164,14 @@ var world = {
 		return texture;
 	},
 
+	start_music: function() {
+		if (world.music == null)
+		{
+			world.music = game.add.audio('exodus');
+			world.music.loopFull();
+		}
+	},
+
 	check_foliage: function() {
 		
 		world.biome_counter--;
@@ -190,8 +205,7 @@ var world = {
 					num -= world.biomes[world.current_biome].type_densities[i].density;
 				}
 			}
-		}
-		
+		}		
 	},
 
 	get_object_height: function(type) {
