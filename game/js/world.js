@@ -50,7 +50,7 @@ var world = {
 		game.load.image('lightning', 'assets/LIGHTNIG.png'); // 128x512
 
 		// audio
-		game.load.audio('exodus', 'assets/audio/exodus.mp3');
+		//game.load.audio('exodus', 'assets/audio/exodus.mp3');
 	},
 
 	create: function() {
@@ -174,11 +174,13 @@ var world = {
 	},
 
 	start_music: function() {
+		/*
 		if (world.music == null)
 		{
 			world.music = game.add.audio('exodus');
 			world.music.loopFull();
 		}
+		*/
 	},
 
 	check_foliage: function() {
