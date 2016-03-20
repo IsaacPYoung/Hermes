@@ -16,7 +16,7 @@ var world = {
 	// 'biomes' for foliage variation
 	biomes: null,
 	current_biome: 0,
-	biome_counter: 24,
+	biome_counter: 20,
 
 	preload: function() {
 
@@ -31,6 +31,12 @@ var world = {
 		// foliage
 		game.load.image('fir_tree', 'assets/world/pinefirtree.png'); // 64x128
 		game.load.image('rose_bush', 'assets/world/RoseBush.png'); // 24x24
+		game.load.image('grass_1', 'assets/world/grass 1.png'); //16x16
+		game.load.image('grass_2', 'assets/world/grass 2.png'); //16x16
+		game.load.image('grass_3', 'assets/world/grass 3.png'); //16x16
+		game.load.image('rocks_1', 'assets/world/rocks 1.png'); //16x16
+		game.load.image('rocks_2', 'assets/world/rocks 2.png'); //16x16
+		game.load.image('rocks_3', 'assets/world/rocks 3.png'); //16x16
 
 		// the enemies
 		game.load.image('enemy_1', 'assets/enemies/enemy1.png');
@@ -51,7 +57,7 @@ var world = {
 		world.enemy_group.enableBody = true;
 		world.enemies = [];
 
-		for (i = 0; i * TileWidth < GameWidth * 2; i++)
+		for (var i = 0; i * TileWidth < GameWidth * 2; i++)
 		{
 			xoff = i * TileWidth;
 			yoff = GameHeight - 2 * TileHeight;
@@ -66,6 +72,7 @@ var world = {
 			world.ground_bottom_tiles[i].immovable = true;
 			world.ground_bottom_tiles[i].body.velocity.x = -PlayerSpeed;
 
+			//console.log('new tile');
 			world.check_foliage();
 
 			if (i * TileWidth > GameWidth && Math.random() < world.enemy_frequency)
@@ -154,22 +161,25 @@ var world = {
 		{
 			world.current_biome = Math.floor(Math.random() * world.biomes.length);
 			world.biome_counter = Math.floor(world.biomes[world.current_biome].size * (Math.random() * 0.4 + 0.8));
-			console.log(world.biomes[world.current_biome].name);
+			console.log(world.biomes[world.current_biome].name + ' | ' + world.biome_counter);
 		}
-
+		
 		if (Math.random() < world.biomes[world.current_biome].object_density)
 		{
 			xoff = 0;
 			yoff = 0;
 
 			num = Math.random();
-			for (i = 0; i < world.biomes[world.current_biome].type_densities.length; i++)
+			for (var i = 0; i < world.biomes[world.current_biome].type_densities.length; i++)
 			{
 				if (num < world.biomes[world.current_biome].type_densities[i].density)
 				{
 					type = world.biomes[world.current_biome].type_densities[i].type;
-					console.log(type);
-					yoff = -world.get_object_height(type)
+					
+					xoff = Math.floor((Math.random() - 0.5) * world.get_object_width(type));
+					yoff = -(world.get_object_height(type));
+					//yoff = Math.floor(Math.random() * 0.1 * world.get_object_height(type)) - world.get_object_height(type);
+					
 					world.ground_tiles[world.ground_tiles.length - 1].addChild(game.make.sprite(xoff, yoff, type));
 				}
 				else
@@ -178,11 +188,20 @@ var world = {
 				}
 			}
 		}
+		
 	},
 
 	get_object_height: function(type) {
 		result = 0;
 		switch (type) {
+			case 'grass_1':
+			case 'grass_2':
+			case 'grass_3':
+			case 'rocks_1':
+			case 'rocks_2':
+			case 'rocks_3':
+				result = 16;
+				break;
 			case 'rose_bush':
 				result = 24;
 				break;
@@ -197,66 +216,198 @@ var world = {
 		return result;
 	},
 
+	get_object_width: function(type) {
+		result = 0;
+		switch (type) {
+			case 'grass_1':
+			case 'grass_2':
+			case 'grass_3':
+			case 'rocks_1':
+			case 'rocks_2':
+			case 'rocks_3':
+				result = 16;
+				break;
+			case 'rose_bush':
+				result = 24;
+				break;
+			case 'fir_tree':
+				result = 64;
+				break;
+			default:
+				result = 0;
+				break;
+		}
+
+		return result;
+	},
+
 	create_biomes: function() {
 		
 		world.biomes = [];
 
 		world.biomes.push({
-			name: 'desert',
-			size: 24,
+			name: 'barren_desert',
+			size: 16,
 			object_density: 0,
 			type_densities: [],
+		});
 
+		world.biomes.push({
+			name: 'desert',
+			size: 32,
+			object_density: 0.1,
+			type_densities: [{
+				type: 'rocks_1',
+				density: 0.25,
+			}, {
+				type: 'rocks_2',
+				density: 0.4,
+			}, {
+				type: 'rocks_3',
+				density: 0.25,
+			}, {
+				type: 'grass_1',
+				density: 0.1
+			}],
+		});
+
+		world.biomes.push({
+			name: 'rocky_desert',
+			size: 32,
+			object_density: 0.5,
+			type_densities: [{
+				type: 'rocks_1',
+				density: 0.3,
+			}, {
+				type: 'rocks_2',
+				density: 0.25,
+			}, {
+				type: 'rocks_3',
+				density: 0.35,
+			}, {
+				type: 'grass_3',
+				density: 0.1
+			}],
 		});
 
 		world.biomes.push({
 			name: 'forest',
 			size: 32,
-			object_density: 0.4,
+			object_density: 0.6,
 			type_densities: [{
 				type: 'fir_tree',
-				density: 0.8,
+				density: 0.45,
 			}, {
 				type: 'rose_bush',
 				density: 0.2,
+			}, {
+				type: 'grass_1',
+				density: 0.1,
+			}, {
+				type: 'grass_2',
+				density: 0.1,
+			}, {
+				type: 'grass_3',
+				density: 0.05,
+			}, {
+				type: 'rocks_2',
+				density: 0.05
+			}, {
+				type: 'rocks_3',
+				density: 0.05
+			}],
+		});
+
+		world.biomes.push({
+			name: 'dense_forest',
+			size: 32,
+			object_density: 0.7,
+			type_densities: [{
+				type: 'fir_tree',
+				density: 0.65,
+			}, {
+				type: 'rose_bush',
+				density: 0.25,
+			}, {
+				type: 'grass_3',
+				density: 0.05,
+			}, {
+				type: 'rocks_1',
+				density: 0.05
 			}],
 		});
 
 		world.biomes.push({
 			name: 'meadow',
 			size: 48,
-			object_density: 0.2,
+			object_density: 0.8,
 			type_densities: [{
 				type: 'fir_tree',
-				density: 0.1,
+				density: 0.05,
 			}, {
 				type: 'rose_bush',
-				density: 0.9,
+				density: 0.4,
+			}, {
+				type: 'grass_1',
+				density: 0.15,
+			}, {
+				type: 'grass_2',
+				density: 0.15,
+			}, {
+				type: 'grass_3',
+				density: 0.2,
+			}, {
+				type: 'rocks_2',
+				density: 0.05,
 			}],
 		});
 
 		world.biomes.push({
 			name: 'field',
 			size: 64,
-			object_density: 0.1,
+			object_density: 0.8,
 			type_densities: [{
 				type: 'fir_tree',
-				density: 0.2,
+				density: 0.1,
 			}, {
 				type: 'rose_bush',
-				density: 0.8,
+				density: 0.15,
+			}, {
+				type: 'grass_1',
+				density: 0.2,
+			}, {
+				type: 'grass_2',
+				density: 0.25,
+			}, {
+				type: 'grass_3',
+				density: 0.2,
+			}, {
+				type: 'rocks_1',
+				density: 0.05,
+			}, {
+				type: 'rocks_3',
+				density: 0.05,
 			}],
 		});
 
 		world.biomes.push({
 			name: 'sparse_forest',
-			object_density: 0.1,
+			object_density: 0.5,
 			size: 32,
 			type_densities: [{
 				type: 'fir_tree',
-				density: 0.9,
+				density: 0.6,
 			}, {
 				type: 'rose_bush',
+				density: 0.1,
+			}, {
+				type: 'grass_2',
+				density: 0.1,
+			}, {
+				type: 'grass_3',
+				density: 0.1,
+			}, {
+				type: 'rocks_3',
 				density: 0.1,
 			}],
 		});
