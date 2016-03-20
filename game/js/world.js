@@ -13,6 +13,11 @@ var world = {
 	// how often enemies are spawned
 	enemy_frequency: 0.1,
 
+	// 'biomes' for foliage variation
+	biomes: null,
+	current_biome: 0,
+	biome_counter: 24,
+
 	preload: function() {
 
 		// the ground
@@ -23,6 +28,10 @@ var world = {
 		game.load.image('ground_bottom_2', 'assets/world/ground tile bottom 2.png');
 		game.load.image('ground_bottom_3', 'assets/world/ground tile bottom 3.png');
 
+		// foliage
+		game.load.image('fir_tree', 'assets/world/pinefirtree.png'); // 64x128
+		game.load.image('rose_bush', 'assets/world/RoseBush.png'); // 24x24
+
 		// the enemies
 		game.load.image('enemy_1', 'assets/enemies/enemy1.png');
 		game.load.image('enemy_2', 'assets/enemies/enemy2.png');
@@ -30,6 +39,8 @@ var world = {
 	},
 
 	create: function() {
+
+		world.create_biomes();
 
 		world.ground_group = game.add.group();
 		world.ground_group.enableBody = true;
@@ -55,6 +66,8 @@ var world = {
 			world.ground_bottom_tiles[i].immovable = true;
 			world.ground_bottom_tiles[i].body.velocity.x = -PlayerSpeed;
 
+			world.check_foliage();
+
 			if (i * TileWidth > GameWidth && Math.random() < world.enemy_frequency)
 			{
 				world.spawn_enemy();
@@ -75,9 +88,11 @@ var world = {
 		}
 
 		// recycle the ground tiles
-		if (world.ground_tiles[0].position.x < -TileWidth)
+		if (world.ground_tiles[0].position.x < -(2 * TileWidth))
 		{
 			world.move_first_tile_to_end();
+
+			world.check_foliage();
 
 			if (Math.random() < world.enemy_frequency)
 			{
@@ -100,6 +115,7 @@ var world = {
 
 		tmp = world.ground_tiles.shift();
 		tmp.position.x = xoff;
+		tmp.removeChildren();
 		world.ground_tiles.push(tmp);
 
 		tmp = world.ground_bottom_tiles.shift();
@@ -129,5 +145,120 @@ var world = {
 		texture += top == true ? 'top_' : 'bottom_';
 		texture += Math.floor(Math.random() * 3 + 1);
 		return texture;
-	}
+	},
+
+	check_foliage: function() {
+		
+		world.biome_counter--;
+		if (world.biome_counter <= 0)
+		{
+			world.current_biome = Math.floor(Math.random() * world.biomes.length);
+			world.biome_counter = Math.floor(world.biomes[world.current_biome].size * (Math.random() * 0.4 + 0.8));
+			console.log(world.biomes[world.current_biome].name);
+		}
+
+		if (Math.random() < world.biomes[world.current_biome].object_density)
+		{
+			xoff = 0;
+			yoff = 0;
+
+			num = Math.random();
+			for (i = 0; i < world.biomes[world.current_biome].type_densities.length; i++)
+			{
+				if (num < world.biomes[world.current_biome].type_densities[i].density)
+				{
+					type = world.biomes[world.current_biome].type_densities[i].type;
+					console.log(type);
+					yoff = -world.get_object_height(type)
+					world.ground_tiles[world.ground_tiles.length - 1].addChild(game.make.sprite(xoff, yoff, type));
+				}
+				else
+				{
+					num -= world.biomes[world.current_biome].type_densities[i].density;
+				}
+			}
+		}
+	},
+
+	get_object_height: function(type) {
+		result = 0;
+		switch (type) {
+			case 'rose_bush':
+				result = 24;
+				break;
+			case 'fir_tree':
+				result = 128;
+				break;
+			default:
+				result = 0;
+				break;
+		}
+
+		return result;
+	},
+
+	create_biomes: function() {
+		
+		world.biomes = [];
+
+		world.biomes.push({
+			name: 'desert',
+			size: 24,
+			object_density: 0,
+			type_densities: [],
+
+		});
+
+		world.biomes.push({
+			name: 'forest',
+			size: 32,
+			object_density: 0.4,
+			type_densities: [{
+				type: 'fir_tree',
+				density: 0.8,
+			}, {
+				type: 'rose_bush',
+				density: 0.2,
+			}],
+		});
+
+		world.biomes.push({
+			name: 'meadow',
+			size: 48,
+			object_density: 0.2,
+			type_densities: [{
+				type: 'fir_tree',
+				density: 0.1,
+			}, {
+				type: 'rose_bush',
+				density: 0.9,
+			}],
+		});
+
+		world.biomes.push({
+			name: 'field',
+			size: 64,
+			object_density: 0.1,
+			type_densities: [{
+				type: 'fir_tree',
+				density: 0.2,
+			}, {
+				type: 'rose_bush',
+				density: 0.8,
+			}],
+		});
+
+		world.biomes.push({
+			name: 'sparse_forest',
+			object_density: 0.1,
+			size: 32,
+			type_densities: [{
+				type: 'fir_tree',
+				density: 0.9,
+			}, {
+				type: 'rose_bush',
+				density: 0.1,
+			}],
+		});
+	},
 };
