@@ -24,5 +24,10 @@ var input = {
 				}
 			}
 		}
+		else
+		{
+			game.state.start(game.state.current, true, false);
+			GameOver = false;
+		}
 	}
 };

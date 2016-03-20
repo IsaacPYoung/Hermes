@@ -46,4 +46,5 @@ function physics() {
 
 function game_over() {
 	GameOver = true;
+	hud.game_over();
 }
