@@ -1,1 +1,1 @@
-A quick endless runner put together at a game jame.
+A quick endless runner put together at the Dal CSS March 2016 game jam.
