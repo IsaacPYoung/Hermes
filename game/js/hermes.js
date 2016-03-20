@@ -6,6 +6,7 @@ function preload() {
 	// run the preloads
 	world.preload();
 	player.preload();
+	hud.preload();
 
 }
 
@@ -21,6 +22,7 @@ function create() {
 	input.create();
 	world.create();
 	player.create();
+	hud.create();
 
 }
 

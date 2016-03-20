@@ -129,6 +129,9 @@ var world = {
 		tmp.position.x = xoff;
 		world.ground_bottom_tiles.push(tmp);
 
+		// woot! #winning
+		hud.update_score(1);
+
 	},
 
 	spawn_enemy: function() {
