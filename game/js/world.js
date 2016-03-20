@@ -144,7 +144,7 @@ var world = {
 	spawn_enemy: function() {
 		xoff = world.ground_tiles[world.ground_tiles.length - 1].position.x;
 		yoff = GameHeight - 2 * TileHeight - PlayerHeight;
-		enemy = 'enemy_' + Math.floor(Math.random() * 3 + 1);
+		enemy = 'enemy_1';// + Math.floor(Math.random() * 3 + 1);
 		world.enemies.push(world.enemy_group.create(xoff, yoff, enemy));
 		world.enemies[world.enemies.length - 1].body.gravity.y = 300;
 	},
