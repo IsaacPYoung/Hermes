@@ -6,13 +6,15 @@ var player = {
 
 	preload: function() {
 
-		game.load.image('player', 'assets/player/shyguy.png');
+		game.load.spritesheet('player', 'assets/player/pheidipp.png', 64, 64);
 	},
 
 	create: function() {
 
 		player.hero = game.add.sprite(PlayerOffset, GameHeight - 2 * TileHeight - PlayerHeight, 'player');
-		
+		player.hero.animations.add('run');
+		player.hero.animations.play('run', 4, true);
+
 		game.physics.arcade.enable(player.hero);
 		player.hero.body.gravity.y = 300;
 
@@ -23,6 +25,7 @@ var player = {
 		if (GameOver)
 		{
 			player.hero.body.velocity.x = 0;
+			player.hero.animations.stop();
 		}
 		else
 		{
