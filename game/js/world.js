@@ -143,10 +143,11 @@ var world = {
 
 	spawn_enemy: function() {
 		xoff = world.ground_tiles[world.ground_tiles.length - 1].position.x;
-		yoff = GameHeight - 2 * TileHeight - PlayerHeight;
+		yoff = GameHeight - 2 * TileHeight - PlayerHeight * Scale;
 		enemy = 'enemy_1';// + Math.floor(Math.random() * 3 + 1);
 		world.enemies.push(world.enemy_group.create(xoff, yoff, enemy));
 		world.enemies[world.enemies.length - 1].body.gravity.y = 300;
+		world.enemies[world.enemies.length - 1].scale.set(Scale);
 	},
 
 	kill_enemy: function(index) {
@@ -198,7 +199,9 @@ var world = {
 					yoff = -(world.get_object_height(type));
 					//yoff = Math.floor(Math.random() * 0.1 * world.get_object_height(type)) - world.get_object_height(type);
 					
-					world.ground_tiles[world.ground_tiles.length - 1].addChild(game.make.sprite(xoff, yoff, type));
+					world.ground_tiles[world.ground_tiles.length - 1]
+						.addChild(game.make.sprite(xoff, yoff, type))
+						.scale.set(Scale);
 				}
 				else
 				{
@@ -229,6 +232,7 @@ var world = {
 				result = 0;
 				break;
 		}
+		result *= Scale;
 
 		return result;
 	},
@@ -254,7 +258,8 @@ var world = {
 				result = 0;
 				break;
 		}
-
+		result *= Scale;
+		
 		return result;
 	},
 

@@ -11,7 +11,8 @@ var player = {
 
 	create: function() {
 
-		player.hero = game.add.sprite(PlayerOffset, GameHeight - 2 * TileHeight - PlayerHeight, 'player');
+		player.hero = game.add.sprite(PlayerOffset, GameHeight - 2 * TileHeight - PlayerHeight * Scale, 'player');
+		player.hero.scale.set(Scale);
 		player.hero.animations.add('run');
 		player.hero.animations.play('run', 5, true);
 

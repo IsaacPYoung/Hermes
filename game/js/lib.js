@@ -10,3 +10,5 @@ var TileWidth = 64;
 var TileHeight = 64;
 
 var GameOver = false;
+
+var Scale = 2.0;
